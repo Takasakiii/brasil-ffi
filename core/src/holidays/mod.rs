@@ -89,25 +89,22 @@ pub fn get_procration_of_the_republic(year: i32) -> Date<Utc> {
     Utc.ymd(year, 11, 15)
 }
 
-pub fn get_all_holidays(date: Date<Utc>) -> Result<[(Date<Utc>, String); 11], Error> {
-    let easter = get_easter(date.year())?;
+pub fn get_all_holidays(year: i32) -> Result<[(Date<Utc>, String); 11], Error> {
+    let easter = get_easter(year)?;
 
     let dates = [
         (easter.get_date(), "Páscoa"),
         (get_carnival(&easter), "Carnaval"),
         (get_corpus_christi(&easter), "Corpus Christi"),
-        (get_new_year(date.year()), "Confraternização mundial"),
-        (get_christmas(date.year()), "Natal"),
-        (get_tiradentes(date.year()), "Tiradentes"),
-        (get_workers(date.year()), "Dia do trabalho"),
-        (get_independence(date.year()), "Independência do Brasil"),
+        (get_new_year(year), "Confraternização mundial"),
+        (get_christmas(year), "Natal"),
+        (get_tiradentes(year), "Tiradentes"),
+        (get_workers(year), "Dia do trabalho"),
+        (get_independence(year), "Independência do Brasil"),
+        (get_nossa_senhora_aparecida(year), "Nossa Senhora Aparecida"),
+        (get_finados(year), "Finados"),
         (
-            get_nossa_senhora_aparecida(date.year()),
-            "Nossa Senhora Aparecida",
-        ),
-        (get_finados(date.year()), "Finados"),
-        (
-            get_procration_of_the_republic(date.year()),
+            get_procration_of_the_republic(year),
             "Procriação da República",
         ),
     ]
@@ -117,7 +114,7 @@ pub fn get_all_holidays(date: Date<Utc>) -> Result<[(Date<Utc>, String); 11], Er
 }
 
 pub fn is_holiday(date: Date<Utc>) -> Result<String, Error> {
-    for (holiday_date, holiday_name) in get_all_holidays(date)?.into_iter() {
+    for (holiday_date, holiday_name) in get_all_holidays(date.year())?.into_iter() {
         if holiday_date == date {
             return Ok(holiday_name);
         }
